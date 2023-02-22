@@ -24,6 +24,9 @@ function addSymbol() {
       userConfig.likedSymbols.push(symbol)
       window.electronAPI.setUserConfig(userConfig)
       displayMessage("positive", "Symbol added.")
+
+      // Rebuild table since ajax url changed
+      createTable()
     })
     .catch(error => {
       console.error(error)
@@ -54,11 +57,7 @@ function displayMessage(type, text) {
   }, 1500)
 }
 
-// Read User Config
-window.electronAPI.getUserConfig().then((config) => {
-  userConfig = config
-
-  // Set symbols table
+function createTable() {
   symbolsTable = new Tabulator("#symbols-table", {
     ajaxURL: "https://api2.binance.com/api/v3/ticker/24hr",
     ajaxParams: { "symbols": JSON.stringify(userConfig.likedSymbols) },
@@ -82,6 +81,14 @@ window.electronAPI.getUserConfig().then((config) => {
     // movableRows: true,
     rowFormatter: (row) => row.getElement().style.color = row.getData().priceChange[0] == "-" ? "#33b040" : "#ff0000",
   })
+}
+
+// Initialize: Read User Config
+window.electronAPI.getUserConfig().then((config) => {
+  userConfig = config
+
+  // Set Symbols Table
+  createTable()
 
   // Change Tray Symbol Event
   symbolsTable.on("rowClick", function(e, row){
