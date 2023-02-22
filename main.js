@@ -116,6 +116,7 @@ const toggleWindow = () => {
   } else {
     showWindow()
   }
+  window.webContents.send('is-window-open', window.isVisible())
 }
 
 const showWindow = () => {

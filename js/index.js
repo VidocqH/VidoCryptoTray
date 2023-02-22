@@ -96,6 +96,8 @@ window.electronAPI.getUserConfig().then((config) => {
     window.electronAPI.setUserConfig(userConfig)
     subscribeWebSocketAndUpdateTray()
   })
+
+  // Set Symbols Table Refresh
   intervalId = setInterval(() => symbolsTable.setData(), 5000)
 
   // Set Tray
@@ -108,5 +110,13 @@ window.electronAPI.getUserConfig().then((config) => {
       document.getElementById("addBtn").click()
     }
   })
+})
+
+window.electronAPI.onWindowToggle((event, isWindowOpen) => {
+  if (isWindowOpen) {
+    intervalId = setInterval(() => symbolsTable.setData(), 5000)
+  } else {
+    clearInterval(intervalId)
+  }
 })
 
