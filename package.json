@@ -5,18 +5,17 @@
   "author": "Vidocq",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^23.1.0"
+    "electron": "^23.1.0",
+    "eslint": "^8.34.0"
   },
   "scripts": {
     "start": "electron .",
     "dev": "APP_DEV=true electron ."
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/VidocqH/VidoCryptoTray.git"
-  },
+  "repository": "https://github.com/VidocqH/VidoCryptoTray.git",
   "dependencies": {
     "electron-reload": "^2.0.0-alpha.1",
     "tabulator-tables": "^5.4.4"
-  }
+  },
+  "description": "Mac Tray for displaying Crypto Coin price and change percentage."
 }

@@ -35,12 +35,12 @@ function addSymbol() {
 
 function subscribeWebSocketAndUpdateTray() {
   // Be sure close existing connection
-  if (this.socket) {
-    this.socket.close()
+  if (socket) {
+    socket.close()
   }
 
-  this.socket = new WebSocket(`wss://data-stream.binance.com/ws/${userConfig.trayTickerSymbol || "btcusdt"}@ticker`)
-  this.socket.onmessage = (event) => {
+  socket = new WebSocket(`wss://data-stream.binance.com/ws/${userConfig.trayTickerSymbol || "btcusdt"}@ticker`)
+  socket.onmessage = (event) => {
     const data = JSON.parse(event.data)
     window.electronAPI.updateTrayTitle(data)
   }
@@ -63,7 +63,6 @@ function createTable() {
     ajaxParams: { "symbols": JSON.stringify(userConfig.likedSymbols) },
     ajaxResponse: function(url, params, response) {
       response.forEach(elem => {
-        elem.symbol = elem.symbol
         elem.lastPrice = Number(elem.lastPrice).toFixed(4)
         elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(elem.priceChange).toFixed(4)
         elem.priceChangePercent = (elem.priceChange[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 5) + '%'
