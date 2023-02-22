@@ -6,11 +6,11 @@ let userConfig = undefined
 function addSymbol() {
   const symbol = document.getElementById("symbolInput").value.toUpperCase()
   if (symbol == "") {
-    displayMessage("Symbol is empty.")
+    displayMessage("negative", "Symbol is empty.")
     return
   }
   if (userConfig.likedSymbols.find((existedSymbol) => existedSymbol == symbol)) {
-    displayMessage("Symbol already existed.")
+    displayMessage("negative", "Symbol already existed.")
     return
   }
 
@@ -18,11 +18,12 @@ function addSymbol() {
     .then(response => response.json())
     .then(result => {
       if (result.code) {
-        displayMessage(result.msg)
+        displayMessage("negative", result.msg)
         return
       }
       userConfig.likedSymbols.push(symbol)
       window.electronAPI.setUserConfig(userConfig)
+      displayMessage("positive", "Symbol added.")
     })
     .catch(error => {
       console.error(error)
@@ -42,11 +43,15 @@ function subscribeWebSocketAndUpdateTray() {
   }
 }
 
-function displayMessage(text) {
+function displayMessage(type, text) {
   const messageElem = document.getElementById("message")
   document.getElementById("messageText").innerText = text
-  messageElem.classList.toggle("hidden")
-  setTimeout(() => messageElem.classList.toggle("hidden"), 1500)
+  messageElem.classList.remove("hidden")
+  messageElem.classList.add(type)
+  setTimeout(() => {
+    messageElem.classList.add("hidden")
+    messageElem.classList.remove(type)
+  }, 1500)
 }
 
 // Read User Config
