@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../css/index.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    <link href="../node_modules/tabulator-tables/dist/css/tabulator_semanticui.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="../js/index.js"></script>
+  </head>
+
+  <body>
+    <div class="setting">
+      <div class="add-symbol">
+        <div class="mini ui input">
+          <input type="text" id="symbolInput" size=20 placeholder="Symbol eg: BTCUSDT"></input>
+        </div>
+        <button class="tiny ui button" type="submit" id="addBtn" onclick="addSymbol()">Add</button>
+      </div>
+      <div class="change-setting">
+        <button type="button" class="tiny ui button" onclick="">Setting</button>
+      </div>
+    </div>
+    <div class="ui mini negative compact message hidden" id="message">
+      <div class="header" id="messageText"></div>
+    </div>
+    <div id="symbols-table"></div>
+    <footer>
+      <div class="footer-link">
+        Made by <a href="https://github.com/VidocqH" target="_blank">VidocqH</a>
+        <br />
+        Data from <a href="https://binance-docs.github.io/apidocs/spot/en" target="_blank">Binance</a>
+      </div>
+    </footer>
+  </body>
+
+</html>

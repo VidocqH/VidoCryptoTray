@@ -1,0 +1,47 @@
+/* Variables */
+:root {
+  --background-color: #f5f5f4;
+  --text-color: #333;
+  --window-border-radius: 6px;
+  --font-size: 14px;
+  margin-top: 8px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#symbols-table {
+  margin-top: 2px;
+}
+
+#message {
+  position: absolute;
+  margin-top: 3px;
+  margin-bottom: 0px;
+  margin-left: 5px;
+  left: 0px;
+  top: 0px;
+}
+
+.setting {
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.add-symbol {
+  float: left;
+}
+
+.change-setting {
+  float: right;
+}
+
+.footer-link {
+  font-size: calc(var(--font-size) - 4px);
+  text-align: center;
+}
+
+.footer-link a {
+  color: var(--text-color);
+}
