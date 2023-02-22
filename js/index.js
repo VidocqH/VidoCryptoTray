@@ -61,8 +61,8 @@ window.electronAPI.getUserConfig().then((config) => {
       response.forEach(elem => {
         elem.symbol = elem.symbol
         elem.lastPrice = Number(elem.lastPrice).toFixed(4)
-        elem.priceChange = Number(elem.priceChange).toFixed(4)
-        elem.priceChangePercent = elem.priceChangePercent.slice(0, 5) + '%'
+        elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(elem.priceChange).toFixed(4)
+        elem.priceChangePercent = (elem.priceChange[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 5) + '%'
       })
       return response
     },
