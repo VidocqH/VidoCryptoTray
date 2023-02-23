@@ -15,10 +15,11 @@
 
 #message {
   position: absolute;
+  width: 60%;
   margin-top: 3px;
   margin-bottom: 0px;
-  margin-left: 5px;
-  left: 0px;
+  margin-left: -30%;
+  left: 50%;
   top: 0px;
 }
 

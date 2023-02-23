@@ -14,7 +14,10 @@ let tray = undefined
 let window = undefined
 let config = undefined
 
-const ICON_ROOT_PATH = "node_modules/cryptocurrency-icons/32"
+const ICON_ROOT_PATH = "node_modules/cryptocurrency-icons/32/white"
+const DEFAULT_COIN_ICON = nativeImage
+  .createFromPath(path.join(ICON_ROOT_PATH, "generic.png"))
+  .resize({"width": 18, "height": 18})
 const CONFIG_ROOT_PATH = path.join(app.getPath('userData'), 'config.json')
 // Initialize config
 if (!fs.existsSync(CONFIG_ROOT_PATH)) {
@@ -94,15 +97,16 @@ const createWindow = () => {
       .then(result => {
         const baseAsset = result.symbols[0].baseAsset
         const icon = nativeImage
-          .createFromPath(path.join(ICON_ROOT_PATH, '/white/' + baseAsset.toLowerCase() + '.png'))
+          .createFromPath(path.join(ICON_ROOT_PATH, baseAsset.toLowerCase() + '.png'))
           .resize({"width": 18, "height": 18})
-        tray.setImage(icon)
+        tray.setImage(icon.isEmpty() ? DEFAULT_COIN_ICON : icon)
         if (ticker.c < ticker.o) {
           tray.setTitle(`${COLOR.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
         } else {
           tray.setTitle(`${COLOR.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
         }
       })
+      .catch(error => console.error(error))
   })
   ipcMain.handle('get-config', () => config )
   ipcMain.on('set-config', (event, config) => setUserConfig(config))
@@ -137,6 +141,4 @@ const showWindow = () => {
 ipcMain.on('show-window', () => {
   showWindow()
 })
-
-// TODO: set tooltip
 
