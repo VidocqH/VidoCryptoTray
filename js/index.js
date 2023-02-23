@@ -84,7 +84,7 @@ function createTable() {
       {title:"Change", field:"priceChange", sorter:"number"},
       {title:"Percent", field:"priceChangePercent", sorter:"number"},
     ],
-    // movableRows: true,
+    movableRows: true,
     rowFormatter: (row) => row.getElement().style.color =
       getDisplayColor()[row.getData().priceChange[0] == "-" ? "down" : "up"]
   })
@@ -102,6 +102,15 @@ window.electronAPI.getUserConfig().then((config) => {
     userConfig.trayTickerSymbol = row.getCell('symbol').getValue().toLowerCase()
     window.electronAPI.setUserConfig(userConfig)
     subscribeWebSocketAndUpdateTray()
+  })
+
+  // Table Right Click Event
+  symbolsTable.on("rowContext", function(e, row){
+    const deleteSymbol = row.getCell('symbol').getValue()
+    userConfig.likedSymbols = userConfig.likedSymbols.filter(elem => elem != deleteSymbol)
+    createTable()
+    window.electronAPI.setUserConfig(userConfig)
+    e.preventDefault()
   })
 
   // Set Symbols Table Refresh
