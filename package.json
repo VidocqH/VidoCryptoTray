@@ -5,18 +5,27 @@
   "author": "Vidocq",
   "license": "MIT",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.5",
+    "@electron-forge/maker-deb": "^6.0.5",
+    "@electron-forge/maker-rpm": "^6.0.5",
+    "@electron-forge/maker-squirrel": "^6.0.5",
+    "@electron-forge/maker-zip": "^6.0.5",
     "electron": "^23.1.0",
     "eslint": "^8.34.0"
   },
   "scripts": {
-    "start": "electron .",
-    "dev": "APP_DEV=true electron ."
+    "start": "electron-forge start",
+    "dev": "APP_DEV=true electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": "https://github.com/VidocqH/VidoCryptoTray.git",
   "dependencies": {
     "cryptocurrency-icons": "^0.18.1",
     "electron-reload": "^2.0.0-alpha.1",
-    "tabulator-tables": "^5.4.4"
+    "electron-squirrel-startup": "^1.0.0",
+    "tabulator-tables": "^5.4.4",
+    "ws": "^8.12.1"
   },
   "description": "Mac Tray for displaying Crypto Coin price and change percentage."
 }
