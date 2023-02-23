@@ -14,6 +14,7 @@
   },
   "repository": "https://github.com/VidocqH/VidoCryptoTray.git",
   "dependencies": {
+    "cryptocurrency-icons": "^0.18.1",
     "electron-reload": "^2.0.0-alpha.1",
     "tabulator-tables": "^5.4.4"
   },

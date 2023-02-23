@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, Tray} = require('electron')
+const {app, BrowserWindow, ipcMain, Tray, nativeImage} = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -17,17 +17,18 @@ let tray = undefined
 let window = undefined
 let config = undefined
 
-const configRootPath = path.join(app.getPath('userData'), 'config.json')
+const ICON_ROOT_PATH = "node_modules/cryptocurrency-icons/32"
+const CONFIG_ROOT_PATH = path.join(app.getPath('userData'), 'config.json')
 // Initialize config
-if (!fs.existsSync(configRootPath)) {
+if (!fs.existsSync(CONFIG_ROOT_PATH)) {
   setUserConfig(DEFAULT_CONFIG)
 } else {
-  config = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'))
+  config = JSON.parse(fs.readFileSync(CONFIG_ROOT_PATH, 'utf-8'))
 }
 
 function setUserConfig(editedConfig) {
   config = editedConfig
-  fs.writeFileSync(configRootPath, JSON.stringify(editedConfig))
+  fs.writeFileSync(CONFIG_ROOT_PATH, JSON.stringify(editedConfig))
 }
 
 // Don't show the app in the doc
@@ -87,14 +88,20 @@ const createWindow = () => {
 
   // Renderer funcs exposure
   ipcMain.on('update-ticker', (event, ticker) => {
-    if (ticker.c < ticker.o)
-      tray.setTitle(
-        `${GREEN} ${ticker.s} ${Number(ticker.c).toFixed(2)} -${((ticker.o - ticker.c) / ticker.o * 100).toFixed(2)}%`
-        )
-    else
-      tray.setTitle(
-        `${RED} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${((ticker.c - ticker.o) / ticker.o * 100).toFixed(2)}%`
-        )
+    fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${ticker.s}`)
+      .then(response => response.json())
+      .then(result => {
+        const baseAsset = result.symbols[0].baseAsset
+        const icon = nativeImage
+          .createFromPath(path.join(ICON_ROOT_PATH, '/white/' + baseAsset.toLowerCase() + '.png'))
+          .resize({"width": 18, "height": 18})
+        tray.setImage(icon)
+        if (ticker.c < ticker.o) {
+          tray.setTitle(`${GREEN} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
+        } else {
+          tray.setTitle(`${RED} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
+        }
+      })
   })
   ipcMain.handle('get-config', () => config )
   ipcMain.on('set-config', (event, config) => setUserConfig(config))
