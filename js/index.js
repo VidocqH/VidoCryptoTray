@@ -57,6 +57,13 @@ function displayMessage(type, text) {
   }, 1500)
 }
 
+function getDisplayColor() {
+  if (userConfig.reverseRedGreen) {
+    return { "down": "red", "up": "green"}
+  }
+  return { "down": "green", "up": "red" }
+}
+
 function createTable() {
   symbolsTable = new Tabulator("#symbols-table", {
     ajaxURL: "https://api2.binance.com/api/v3/ticker/24hr",
@@ -78,7 +85,8 @@ function createTable() {
       {title:"Percent", field:"priceChangePercent", sorter:"number"},
     ],
     // movableRows: true,
-    rowFormatter: (row) => row.getElement().style.color = row.getData().priceChange[0] == "-" ? "#33b040" : "#ff0000",
+    rowFormatter: (row) => row.getElement().style.color =
+      getDisplayColor()[row.getData().priceChange[0] == "-" ? "down" : "up"]
   })
 }
 

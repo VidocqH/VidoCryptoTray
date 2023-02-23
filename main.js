@@ -2,9 +2,6 @@ const {app, BrowserWindow, ipcMain, Tray, nativeImage} = require('electron')
 const path = require('path')
 const fs = require('fs')
 
-const RED = '\033[31;1m'
-const GREEN = '\033[32;1m'
-
 const DEFAULT_CONFIG = {
   "likedSymbols": ["BTCUSDT", "ETHUSDT"],
   "trayTickerSymbol": "btcusdt",
@@ -25,6 +22,10 @@ if (!fs.existsSync(CONFIG_ROOT_PATH)) {
 } else {
   config = JSON.parse(fs.readFileSync(CONFIG_ROOT_PATH, 'utf-8'))
 }
+
+const RED = '\033[31;1m'
+const GREEN = '\033[32;1m'
+const COLOR = config.reverseRedGreen ? { "up": GREEN, "down": RED } : { "up": RED, "down": GREEN }
 
 function setUserConfig(editedConfig) {
   config = editedConfig
@@ -97,9 +98,9 @@ const createWindow = () => {
           .resize({"width": 18, "height": 18})
         tray.setImage(icon)
         if (ticker.c < ticker.o) {
-          tray.setTitle(`${GREEN} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
+          tray.setTitle(`${COLOR.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
         } else {
-          tray.setTitle(`${RED} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
+          tray.setTitle(`${COLOR.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
         }
       })
   })
