@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.2/dist/semantic.min.js"></script>
+    <link rel="stylesheet" href="../css/setting.css" media="screen" charset="utf-8">
+    <script src="../js/setting.js"></script>
+  </head>
+  <body>
+    <div class="setting-title">
+      <div class="setting-span">
+        <h1 class="ui big header">Setting</h1>
+      </div>
+      <div class="setting-btns">
+        <button class="tiny ui green button" onclick="submitConfig()">Save</button>
+        <a href="index.html" style="color: inherit;">
+          <button class="tiny ui red button">Cancel</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="ui divider no-margin" style="margin: 2px"></div>
+
+    <div class="setting-panel">
+      <div class="ui form setting-color">
+        <div class="inline fields">
+          <label class="inline field" style="width: auto;">Color Set: </label>
+          <div class="field" style="width: auto;">
+            <div class="ui radio checkbox">
+              <input type="radio" name="color" id="redUp">
+              <label for="redUp">
+                <i class="red arrow up icon"></i>
+                <i class="green arrow down icon"></i>
+              </label>
+            </div>
+          </div>
+          <div class="field" style="width: auto;">
+            <div class="ui radio checkbox">
+              <input type="radio" name="color" id="greenUp">
+              <label for="greenUp">
+                <i class="green arrow up icon"></i>
+                <i class="red arrow down icon"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
