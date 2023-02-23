@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain, Tray, nativeImage} = require('electron')
 const path = require('path')
 const fs = require('fs')
+const WebSocket = require('ws')
 
 const DEFAULT_CONFIG = {
   "likedSymbols": ["BTCUSDT", "ETHUSDT"],
@@ -13,8 +14,9 @@ app.isPackaged || require('electron-reload')(__dirname)
 let tray = undefined
 let window = undefined
 let config = undefined
+let socket = undefined
 
-const ICON_ROOT_PATH = "node_modules/cryptocurrency-icons/32/white"
+const ICON_ROOT_PATH = path.join(__dirname, "/node_modules/cryptocurrency-icons/32/white")
 const DEFAULT_COIN_ICON = nativeImage
   .createFromPath(path.join(ICON_ROOT_PATH, "generic.png"))
   .resize({"width": 18, "height": 18})
@@ -75,6 +77,31 @@ const getWindowPosition = () => {
   return {x: x, y: y}
 }
 
+function subscribeWebSocketAndUpdateTray(symbol) {
+  // Get Icon
+  fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`)
+    .then(response => response.json())
+    .then(result => {
+      const baseAsset = result.symbols[0].baseAsset
+      const icon = nativeImage
+        .createFromPath(path.join(ICON_ROOT_PATH, baseAsset.toLowerCase() + '.png'))
+        .resize({"width": 18, "height": 18})
+      tray.setImage(icon.isEmpty() ? DEFAULT_COIN_ICON : icon)
+    })
+    .catch(error => console.error(error))
+
+  // Subscribe
+  socket = new WebSocket(`wss://data-stream.binance.com/ws/${symbol || "btcusdt"}@ticker`)
+  socket.onmessage = (event) => {
+    const ticker = JSON.parse(event.data)
+    if (ticker.c < ticker.o) {
+      tray.setTitle(`${COLOR.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
+    } else {
+      tray.setTitle(`${COLOR.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
+    }
+  }
+}
+
 const createWindow = () => {
   window = new BrowserWindow({
     width: 405,
@@ -90,23 +117,13 @@ const createWindow = () => {
     }
   })
 
+  // Initialize Tray after window created
+  subscribeWebSocketAndUpdateTray(config.trayTickerSymbol)
+
   // Renderer funcs exposure
   ipcMain.on('update-ticker', (event, ticker) => {
-    fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${ticker.s}`)
-      .then(response => response.json())
-      .then(result => {
-        const baseAsset = result.symbols[0].baseAsset
-        const icon = nativeImage
-          .createFromPath(path.join(ICON_ROOT_PATH, baseAsset.toLowerCase() + '.png'))
-          .resize({"width": 18, "height": 18})
-        tray.setImage(icon.isEmpty() ? DEFAULT_COIN_ICON : icon)
-        if (ticker.c < ticker.o) {
-          tray.setTitle(`${COLOR.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
-        } else {
-          tray.setTitle(`${COLOR.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
-        }
-      })
-      .catch(error => console.error(error))
+    socket.close()
+    subscribeWebSocketAndUpdateTray(ticker)
   })
   ipcMain.handle('get-config', () => config )
   ipcMain.on('set-config', (event, config) => setUserConfig(config))

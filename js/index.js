@@ -1,4 +1,3 @@
-let socket = undefined
 let symbolsTable = undefined
 let intervalId = undefined
 let userConfig = undefined
@@ -31,19 +30,6 @@ function addSymbol() {
     .catch(error => {
       console.error(error)
     })
-}
-
-function subscribeWebSocketAndUpdateTray() {
-  // Be sure close existing connection
-  if (socket) {
-    socket.close()
-  }
-
-  socket = new WebSocket(`wss://data-stream.binance.com/ws/${userConfig.trayTickerSymbol || "btcusdt"}@ticker`)
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data)
-    window.electronAPI.updateTrayTitle(data)
-  }
 }
 
 function displayMessage(type, text) {
@@ -100,8 +86,8 @@ window.electronAPI.getUserConfig().then((config) => {
   // Change Tray Symbol Event
   symbolsTable.on("rowClick", function(e, row){
     userConfig.trayTickerSymbol = row.getCell('symbol').getValue().toLowerCase()
+    window.electronAPI.updateTrayTitle(userConfig.trayTickerSymbol)
     window.electronAPI.setUserConfig(userConfig)
-    subscribeWebSocketAndUpdateTray()
   })
 
   // Table Right Click Event
@@ -115,9 +101,6 @@ window.electronAPI.getUserConfig().then((config) => {
 
   // Set Symbols Table Refresh
   intervalId = setInterval(() => symbolsTable.setData(), 5000)
-
-  // Set Tray
-  document.addEventListener('DOMContentLoaded', subscribeWebSocketAndUpdateTray())
 
   // Listen Enter
   document.getElementById("symbolInput").addEventListener("keypress", (event) => {
