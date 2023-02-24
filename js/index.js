@@ -65,10 +65,10 @@ function createTable() {
     dataLoader: false,
     rowHeight: 30,
     columns:[
-      {title:"Symbol", field:"symbol"},
-      {title:"Price", field:"lastPrice", sorter:"number"},
-      {title:"Change", field:"priceChange", sorter:"number"},
-      {title:"Percent", field:"priceChangePercent", sorter:"number"},
+      { title: "Symbol", field: "symbol", sorter: "string" },
+      { title: "Price", field: "lastPrice", sorter: "number" },
+      { title: "Change", field: "priceChange", sorter: "number" },
+      { title: "Percent", field: "priceChangePercent", sorter: "number" },
     ],
     movableRows: true,
     rowFormatter: (row) => row.getElement().style.color =

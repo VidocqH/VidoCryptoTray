@@ -9,23 +9,30 @@ const DEFAULT_CONFIG = {
   "reverseRedGreen": false
 }
 
-app.isPackaged || require('electron-reload')(__dirname)
+// Electron Hot Reload when in development
+app.isPackaged || require('electron-reload')(__dirname, {
+  electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+  hardResetMethod: 'exit'
+})
 
 let tray = undefined
 let window = undefined
 let config = undefined
 let socket = undefined
 
-const ICON_ROOT_PATH = path.join(__dirname, "/node_modules/cryptocurrency-icons/32/white")
-const DEFAULT_COIN_ICON = nativeImage
-  .createFromPath(path.join(ICON_ROOT_PATH, "generic.png"))
-  .resize({"width": 18, "height": 18})
-const CONFIG_ROOT_PATH = path.join(app.getPath('userData'), 'config.json')
+const ICON_ROOT_PATH = path.join(__dirname, "node_modules/cryptocurrency-icons/32/white")
+const DEFAULT_COIN_ICON = 
+  nativeImage
+    .createFromPath(path.join(ICON_ROOT_PATH, "generic.png"))
+    .resize({ "width": 18, "height": 18 })
+const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json')
+const ASSET_PATH = path.join(__dirname, 'assets')
+
 // Initialize config
-if (!fs.existsSync(CONFIG_ROOT_PATH)) {
+if (!fs.existsSync(CONFIG_PATH)) {
   setUserConfig(DEFAULT_CONFIG)
 } else {
-  config = JSON.parse(fs.readFileSync(CONFIG_ROOT_PATH, 'utf-8'))
+  config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'))
 }
 
 const RED = '\033[31;1m'
@@ -34,7 +41,7 @@ const COLOR = config.reverseRedGreen ? { "up": GREEN, "down": RED } : { "up": RE
 
 function setUserConfig(editedConfig) {
   config = editedConfig
-  fs.writeFileSync(CONFIG_ROOT_PATH, JSON.stringify(editedConfig))
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(editedConfig))
 }
 
 // Don't show the app in the doc
@@ -51,7 +58,7 @@ app.on('window-all-closed', () => {
 })
 
 const createTray = () => {
-  tray = new Tray(path.join(path.join(__dirname, 'assets'), 'iconTemplate.png'))
+  tray = new Tray(path.join(ASSET_PATH, 'iconTemplate.png'))
   tray.on('right-click', toggleWindow)
   tray.on('double-click', toggleWindow)
   tray.on('click', function (event) {
@@ -70,7 +77,6 @@ const getWindowPosition = () => {
 
   // Center window horizontally below the tray icon
   const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
-
   // Position window 4 pixels vertically below the tray icon
   const y = Math.round(trayBounds.y + trayBounds.height + 4)
 
@@ -78,7 +84,7 @@ const getWindowPosition = () => {
 }
 
 function subscribeWebSocketAndUpdateTray(symbol) {
-  // Get Icon
+  // Get Coin Icon
   fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`)
     .then(response => response.json())
     .then(result => {
