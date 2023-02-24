@@ -6,4 +6,21 @@ Tray updates per second. Price page updates per 5 seconds.
 
 Data collects from [Binance](https://www.binance.com/)
 
-<img width="401" alt="image" src="https://user-images.githubusercontent.com/16725418/220752265-6676e496-0b9c-47cd-94d4-f0714d11271c.png">
+<img width="419" alt="image" src="https://user-images.githubusercontent.com/16725418/221058366-c9344e12-87c5-4c96-8595-173ea9a12f64.png">
+
+## Contribute
+
+### Dev Guide
+```bash
+git clone https://github.com/VidocqH/VidoCryptoTray.git
+cd VidoCryptoTray
+yarn install
+yarn dev
+```
+Then there you go!
+
+### Build
+```bash
+yarn run make
+```
+The executable will be in `./out`
