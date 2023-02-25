@@ -19,6 +19,7 @@ let tray = undefined
 let window = undefined
 let config = undefined
 let socket = undefined
+let color_set = undefined
 
 const ICON_ROOT_PATH = path.join(__dirname, "node_modules/cryptocurrency-icons/32/white")
 const DEFAULT_COIN_ICON = 
@@ -30,17 +31,23 @@ const ASSET_PATH = path.join(__dirname, 'assets')
 
 // Initialize config
 if (!fs.existsSync(CONFIG_PATH)) {
-  setUserConfig(DEFAULT_CONFIG)
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(DEFAULT_CONFIG), 'utf-8')
+  config = DEFAULT_CONFIG
 } else {
   config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'))
 }
+updateColorSet()
 
-const RED = '\033[31;1m'
-const GREEN = '\033[32;1m'
-const COLOR = config.reverseRedGreen ? { "up": GREEN, "down": RED } : { "up": RED, "down": GREEN }
+function updateColorSet() {
+  const RED = '\033[31;1m'
+  const GREEN = '\033[32;1m'
+  color_set = config.reverseRedGreen ? { "up": GREEN, "down": RED } : { "up": RED, "down": GREEN }
+}
 
 function setUserConfig(editedConfig) {
   config = editedConfig
+  window.webContents.send('recreate-table')
+  updateColorSet()
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(editedConfig))
 }
 
@@ -101,9 +108,9 @@ function subscribeWebSocketAndUpdateTray(symbol) {
   socket.onmessage = (event) => {
     const ticker = JSON.parse(event.data)
     if (ticker.c < ticker.o) {
-      tray.setTitle(`${COLOR.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
+      tray.setTitle(`${color_set.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
     } else {
-      tray.setTitle(`${COLOR.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
+      tray.setTitle(`${color_set.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
     }
   }
 }

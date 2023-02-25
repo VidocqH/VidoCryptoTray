@@ -23,9 +23,6 @@ function addSymbol() {
       userConfig.likedSymbols.push(symbol)
       window.electronAPI.setUserConfig(userConfig)
       displayMessage("positive", "Symbol added.")
-
-      // Rebuild table since ajax url changed
-      createTable()
     })
     .catch(error => {
       console.error(error)
@@ -94,7 +91,6 @@ window.electronAPI.getUserConfig().then((config) => {
   symbolsTable.on("rowContext", function(e, row){
     const deleteSymbol = row.getCell('symbol').getValue()
     userConfig.likedSymbols = userConfig.likedSymbols.filter(elem => elem != deleteSymbol)
-    createTable()
     window.electronAPI.setUserConfig(userConfig)
     e.preventDefault()
   })
@@ -119,3 +115,6 @@ window.electronAPI.onWindowToggle((event, isWindowOpen) => {
   }
 })
 
+window.electronAPI.recreateTable(() => {
+  createTable()
+})
