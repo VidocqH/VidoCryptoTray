@@ -150,6 +150,12 @@ const createWindow = () => {
       window.hide()
     }
   })
+
+  setInterval(() => {
+    if (socket.readyState === WebSocket.CLOSED) {
+      subscribeWebSocketAndUpdateTray(config.trayTickerSymbol)
+    }
+  }, 5000)
 }
 
 const toggleWindow = () => {
