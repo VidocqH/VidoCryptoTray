@@ -71,6 +71,22 @@ function createTable() {
     rowFormatter: (row) => row.getElement().style.color =
       getDisplayColor()[row.getData().priceChange[0] == "-" ? "down" : "up"]
   })
+
+  // Change Tray Symbol Event
+  symbolsTable.on("rowClick", function (e, row) {
+    userConfig.trayTickerSymbol = row.getCell('symbol').getValue().toLowerCase()
+    window.electronAPI.updateTrayTitle(userConfig.trayTickerSymbol)
+    window.electronAPI.setUserConfig(userConfig)
+  })
+
+  // Table Right Click Event
+  symbolsTable.on("rowContext", function (e, row) {
+    const deleteSymbol = row.getCell('symbol').getValue()
+    userConfig.likedSymbols = userConfig.likedSymbols.filter(elem => elem != deleteSymbol)
+    window.electronAPI.setUserConfig(userConfig)
+    displayMessage("positive", "Symbol deleted.")
+    e.preventDefault()
+  })
 }
 
 // Initialize: Read User Config
@@ -79,21 +95,6 @@ window.electronAPI.getUserConfig().then((config) => {
 
   // Set Symbols Table
   createTable()
-
-  // Change Tray Symbol Event
-  symbolsTable.on("rowClick", function(e, row){
-    userConfig.trayTickerSymbol = row.getCell('symbol').getValue().toLowerCase()
-    window.electronAPI.updateTrayTitle(userConfig.trayTickerSymbol)
-    window.electronAPI.setUserConfig(userConfig)
-  })
-
-  // Table Right Click Event
-  symbolsTable.on("rowContext", function(e, row){
-    const deleteSymbol = row.getCell('symbol').getValue()
-    userConfig.likedSymbols = userConfig.likedSymbols.filter(elem => elem != deleteSymbol)
-    window.electronAPI.setUserConfig(userConfig)
-    e.preventDefault()
-  })
 
   // Set Symbols Table Refresh
   intervalId = setInterval(() => symbolsTable.setData(), 5000)
@@ -115,6 +116,8 @@ window.electronAPI.onWindowToggle((event, isWindowOpen) => {
   }
 })
 
-window.electronAPI.recreateTable(() => {
-  createTable()
+window.electronAPI.onSetUserConfig((event, needRecreateTable) => {
+  if (needRecreateTable) {
+    createTable()
+  }
 })

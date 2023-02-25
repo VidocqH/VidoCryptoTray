@@ -46,7 +46,7 @@ function updateColorSet() {
 
 function setUserConfig(editedConfig) {
   config = editedConfig
-  window.webContents.send('recreate-table')
+  window.webContents.send('on-set-user-config', true)
   updateColorSet()
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(editedConfig))
 }
