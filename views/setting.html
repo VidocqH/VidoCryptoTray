@@ -12,7 +12,7 @@
   <body>
     <div id="page-title">
       <div class="ui grid">
-        <h2 class="ui header nine wide column title-column">Setting</h2>
+        <h2 class="ui header nine wide column title-column">Settings</h2>
         <div class="seven wide column title-column">
           <a href="index.html">
             <button class="tiny ui green button" onclick="submitConfig()">Save</button>
@@ -24,51 +24,51 @@
       </div>
     </div>
 
-    <div class="ui divider"></div>
+    <div class="ui horizontal divider">General</div>
 
     <form class="ui form" style="margin-left: 3px;">
-      <div class="inline field" style="margin-bottom: 3px;">
+      <div class="inline field" style="margin-bottom: 14px;">
         <label>Color Set: </label>
         <div class="ui radio checkbox">
-          <input type="radio" name="color" id="redUp">
+          <input type="radio" name="color" id="redUp" />
           <label for="redUp">
             <i class="red arrow up icon"></i>
             <i class="green arrow down icon"></i>
           </label>
         </div>
         <div class="ui radio checkbox">
-          <input type="radio" name="color" id="greenUp">
+          <input type="radio" name="color" id="greenUp" />
           <label for="greenUp">
             <i class="green arrow up icon"></i>
             <i class="red arrow down icon"></i>
           </label>
         </div>
       </div>
-      <div class="ui horizontal divider">
-        Tray
-      </div>
+
+      <div class="ui horizontal divider">Tray</div>
+
       <div class="inline field">
         <label>Display field: </label>
         <div class="ui checkbox">
-          <input type="checkbox" id="tray-symbol-display" name="display-field" checked>
-          <label class="checkbox-label">Symbol</label>
+          <input type="checkbox" name="display-field" id="display-field-symbol" checked />
+          <label class="checkbox-label" for="display-field-symbol">Symbol</label>
         </div>
         <div class="ui checkbox">
-          <input type="checkbox" id="tray-price-display" name="display-field" checked>
-          <label class="checkbox-label">Price</label>
+          <input type="checkbox" name="display-field" id="display-field-price" checked />
+          <label class="checkbox-label" for="display-field-price">Price</label>
         </div>
         <div class="ui checkbox">
-          <input type="checkbox" id="tray-change-display" name="display-field">
-          <label class="checkbox-label">Change</label>
+          <input type="checkbox" name="display-field" id="display-field-change" />
+          <label class="checkbox-label" for="display-field-change">Change</label>
         </div>
         <div class="ui checkbox">
-          <input type="checkbox" id="tray-percent-display" name="display-field" checked>
-          <label class="checkbox-label">Change %</label>
+          <input type="checkbox" name="display-field" id="display-field-percentage" checked />
+          <label class="checkbox-label" for="display-field-percentage">Change %</label>
         </div>
       </div>
-      <div class="ui horizontal divider">
-        Ticker Table
-      </div>
+
+      <div class="ui horizontal divider">Ticker Table</div>
+
       <div class="inline field">
         <label>Symbol table update interval: 
           <i class="grey exclamation circle icon" style="margin: 0;" title="Please pay attention to ratelimit!"></i>

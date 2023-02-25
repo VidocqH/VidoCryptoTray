@@ -1,42 +1,51 @@
+const TRAY_SHOW_FIELD = ['symbol', 'price', 'change', 'percentage']
+
 let config = undefined
 
+function getColorSetting() {
+  const checkBoxes = document.getElementsByName('color')
+  checkBoxes[config.reverseRedGreen ? 1 : 0].checked = true
+}
+
 function setColorSetting() {
-  if (config.reverseRedGreen) {
-    document.getElementById('greenUp').checked=true
-  } else {
-    document.getElementById('redUp').checked=true
-  }
+  config.reverseRedGreen = document.getElementsByName('color')[1].checked
+}
+
+function getTableUpdateInterval() {
+  document.getElementById('tableUpdateInterval').value = config.tableUpdateInterval / 1000
 }
 
 function setTableUpdateInterval() {
-  document.getElementById('tableUpdateInterval').value = config.tableUpdateInterval / 1000
+  config.tableUpdateInterval = document.getElementById('tableUpdateInterval').value * 1000
+}
+
+function getTrayDisplayField() {
+  const checkBoxes = document.getElementsByName('display-field')
+  TRAY_SHOW_FIELD.forEach((field, index) => {
+    checkBoxes[index].checked = config.trayShowField[field]
+  })
 }
 
 function setTrayDisplayField() {
   const checkBoxes = document.getElementsByName('display-field')
-  console.log(config)
-  checkBoxes[0].checked = config.trayShowField.symbol
-  checkBoxes[1].checked = config.trayShowField.price
-  checkBoxes[2].checked = config.trayShowField.change
-  checkBoxes[3].checked = config.trayShowField.percentage
+  TRAY_SHOW_FIELD.forEach((field, index) => {
+    config.trayShowField[field] = checkBoxes[index].checked
+  })
 }
 
 function submitConfig() {
-  config.reverseRedGreen = document.getElementById('greenUp').checked
-  config.tableUpdateInterval = document.getElementById('tableUpdateInterval').value * 1000
-  const checkBoxes = document.getElementsByName('display-field')
-  config.trayShowField.symbol = checkBoxes[0].checked
-  config.trayShowField.price = checkBoxes[1].checked
-  config.trayShowField.change = checkBoxes[2].checked
-  config.trayShowField.percentage = checkBoxes[3].checked
+  setColorSetting()
+  setTableUpdateInterval()
+  setTrayDisplayField()
   window.electronAPI.setUserConfig(config)
 }
 
 window.electronAPI.getUserConfig().then(originConfig => {
   config = originConfig
 
-  setColorSetting()
-  setTableUpdateInterval()
-  setTrayDisplayField()
+  // Read config and set the value
+  getColorSetting()
+  getTableUpdateInterval()
+  getTrayDisplayField()
 })
 
