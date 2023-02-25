@@ -47,6 +47,10 @@ function getDisplayColor() {
   return { "down": "green", "up": "red" }
 }
 
+function setTableAutoUpdate() {
+  intervalId = setInterval(() => symbolsTable.setData(), userConfig.tableUpdateInterval)
+}
+
 function createTable() {
   symbolsTable = new Tabulator("#symbols-table", {
     ajaxURL: "https://api2.binance.com/api/v3/ticker/24hr",
@@ -97,7 +101,7 @@ window.electronAPI.getUserConfig().then((config) => {
   createTable()
 
   // Set Symbols Table Refresh
-  intervalId = setInterval(() => symbolsTable.setData(), 5000)
+  setTableAutoUpdate()
 
   // Listen Enter
   document.getElementById("symbolInput").addEventListener("keypress", (event) => {
@@ -110,7 +114,7 @@ window.electronAPI.getUserConfig().then((config) => {
 
 window.electronAPI.onWindowToggle((event, isWindowOpen) => {
   if (isWindowOpen) {
-    intervalId = setInterval(() => symbolsTable.setData(), 5000)
+    setTableAutoUpdate()
   } else {
     clearInterval(intervalId)
   }

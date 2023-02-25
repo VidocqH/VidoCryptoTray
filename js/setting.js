@@ -8,15 +8,20 @@ function setColorSetting() {
   }
 }
 
+function setTableUpdateInterval() {
+  document.getElementById('tableUpdateInterval').value = config.tableUpdateInterval / 1000
+}
+
 function submitConfig() {
   config.reverseRedGreen = document.getElementById('greenUp').checked
+  config.tableUpdateInterval = document.getElementById('tableUpdateInterval').value * 1000
   window.electronAPI.setUserConfig(config)
-  console.log("Save")
 }
 
 window.electronAPI.getUserConfig().then(originConfig => {
   config = originConfig
 
   setColorSetting()
+  setTableUpdateInterval()
 })
 

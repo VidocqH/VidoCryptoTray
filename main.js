@@ -6,7 +6,8 @@ const WebSocket = require('ws')
 const DEFAULT_CONFIG = {
   "likedSymbols": ["BTCUSDT", "ETHUSDT"],
   "trayTickerSymbol": "btcusdt",
-  "reverseRedGreen": false
+  "reverseRedGreen": false,
+  "tableUpdateInterval": 5000,
 }
 
 // Electron Hot Reload when in development
