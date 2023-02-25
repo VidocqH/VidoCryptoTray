@@ -8,48 +8,43 @@
     <link rel="stylesheet" href="../css/setting.css" media="screen" charset="utf-8">
     <script src="../js/setting.js"></script>
   </head>
+
   <body>
-    <div class="setting-title">
-      <div class="setting-span">
-        <h1 class="ui big header">Setting</h1>
-      </div>
-      <div class="setting-btns">
-        <a href="index.html" style="color: inherit;">
-          <button class="tiny ui green button" onclick="submitConfig()">Save</button>
-        </a>
-        <a href="index.html" style="color: inherit;">
-          <button class="tiny ui red button">Cancel</button>
-        </a>
-      </div>
-    </div>
-
-    <div class="ui divider no-margin" style="margin: 2px"></div>
-
-    <div class="setting-panel">
-      <div class="ui form setting-color">
-        <div class="inline fields">
-          <label class="inline field" style="width: auto;">Color Set: </label>
-          <div class="field" style="width: auto;">
-            <div class="ui radio checkbox">
-              <input type="radio" name="color" id="redUp">
-              <label for="redUp">
-                <i class="red arrow up icon"></i>
-                <i class="green arrow down icon"></i>
-              </label>
-            </div>
-          </div>
-          <div class="field" style="width: auto;">
-            <div class="ui radio checkbox">
-              <input type="radio" name="color" id="greenUp">
-              <label for="greenUp">
-                <i class="green arrow up icon"></i>
-                <i class="red arrow down icon"></i>
-              </label>
-            </div>
-          </div>
+    <div id="page-title">
+      <div class="ui grid">
+        <h2 class="ui header nine wide column title-column">Setting</h2>
+        <div class="seven wide column title-column">
+          <a href="index.html">
+            <button class="tiny ui green button" onclick="submitConfig()">Save</button>
+          </a>
+          <a href="index.html">
+            <button class="tiny ui red button">Cancel</button>
+          </a>
         </div>
       </div>
     </div>
 
+    <div class="ui divider"></div>
+
+    <form class="ui form" style="margin-left: 3px;">
+      <div class="inline field" style="margin-bottom: 3px;">
+        <label>Color Set: </label>
+        <div class="ui radio checkbox">
+          <input type="radio" name="color" id="redUp">
+          <label for="redUp">
+            <i class="red arrow up icon"></i>
+            <i class="green arrow down icon"></i>
+          </label>
+        </div>
+        <div class="ui radio checkbox">
+          <input type="radio" name="color" id="greenUp">
+          <label for="greenUp">
+            <i class="green arrow up icon"></i>
+            <i class="red arrow down icon"></i>
+          </label>
+        </div>
+      </div>
+
+    </form>
   </body>
 </html>

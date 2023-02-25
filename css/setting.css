@@ -10,15 +10,25 @@
   margin-bottom: 0px;
 }
 
-.setting-title {
-  display: inline-block;
+#page-title {
+  margin-top: 5%;
+  margin-left: 5%;
   width: 100%;
-  /* margin-bottom: 10px; */
+  height: 40px;
 }
-.setting-span {
-  float: left;
+
+.title-column {
+  margin: 0 !important;
+  padding: 0 !important;
 }
-.setting-btns {
-  float: right;
+
+.divider {
+  margin-top: 0px !important;
+  margin-bottom: 8px !important;
 }
+
+a {
+  color: inherit;
+}
+
 
