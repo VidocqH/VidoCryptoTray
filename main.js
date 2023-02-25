@@ -8,6 +8,12 @@ const DEFAULT_CONFIG = {
   "trayTickerSymbol": "btcusdt",
   "reverseRedGreen": false,
   "tableUpdateInterval": 5000,
+  "trayShowField": {
+    "symbol": true,
+    "price": true,
+    "change": false,
+    "percentage": true,
+  },
 }
 
 // Electron Hot Reload when in development
@@ -36,6 +42,12 @@ if (!fs.existsSync(CONFIG_PATH)) {
   config = DEFAULT_CONFIG
 } else {
   config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'))
+  // Missing field due to update
+  for (const key in DEFAULT_CONFIG) {
+    if (config[key] === undefined) {
+      config[key] = DEFAULT_CONFIG[key]
+    }
+  }
 }
 updateColorSet()
 
@@ -91,6 +103,16 @@ const getWindowPosition = () => {
   return {x: x, y: y}
 }
 
+function generateTrayTitle(ticker) {
+  const sign = ticker.c < ticker.o ? '' : '+'
+  const changeColor = sign == '' ? color_set.down : color_set.up
+  const symbol = config.trayShowField.symbol ? ` ${ticker.s}` : ''
+  const price = config.trayShowField.price ? ` ${Number(ticker.c).toFixed(2)}` : ''
+  const change = config.trayShowField.change ? ` ${sign}${Number(ticker.p).toFixed(2)}` : ''
+  const percentage = config.trayShowField.percentage ? ` ${sign}${Number(ticker.P).toFixed(2)}%` : ''
+  return `${changeColor}${symbol}${price}${change}${percentage}`
+}
+
 function subscribeWebSocketAndUpdateTray(symbol) {
   // Get Coin Icon
   fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`)
@@ -108,11 +130,7 @@ function subscribeWebSocketAndUpdateTray(symbol) {
   socket = new WebSocket(`wss://data-stream.binance.com/ws/${symbol || "btcusdt"}@ticker`)
   socket.onmessage = (event) => {
     const ticker = JSON.parse(event.data)
-    if (ticker.c < ticker.o) {
-      tray.setTitle(`${color_set.down} ${ticker.s} ${Number(ticker.c).toFixed(2)} ${Number(ticker.P).toFixed(2)}%`)
-    } else {
-      tray.setTitle(`${color_set.up} ${ticker.s} ${Number(ticker.c).toFixed(2)} +${Number(ticker.P).toFixed(2)}%`)
-    }
+    tray.setTitle(generateTrayTitle(ticker))
   }
 }
 

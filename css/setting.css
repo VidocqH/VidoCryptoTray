@@ -22,6 +22,11 @@
   padding: 0 !important;
 }
 
+.checkbox-label {
+  padding-left: 20px !important;
+  padding-right: 6px !important;
+}
+
 .divider {
   margin-top: 0px !important;
   margin-bottom: 8px !important;
