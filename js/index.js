@@ -59,7 +59,7 @@ function createTable() {
       response.forEach(elem => {
         elem.lastPrice = Number(Number(elem.lastPrice).toFixed(4))
         elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(Number(elem.priceChange).toFixed(4))
-        elem.priceChangePercent = (elem.priceChange[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 4) + '%'
+        elem.priceChangePercent = (elem.priceChangePercent[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 4) + '%'
       })
       return response
     },
@@ -71,9 +71,18 @@ function createTable() {
       { title: "Change", field: "priceChange", sorter: "number" },
       { title: "Percent", field: "priceChangePercent", sorter: "number" },
     ],
-    movableRows: true,
-    rowFormatter: (row) => row.getElement().style.color =
-      getDisplayColor()[row.getData().priceChange[0] == "-" ? "down" : "up"]
+    rowFormatter: (row) => {
+      row.getElement().style.color = getDisplayColor()[row.getData().priceChangePercent[0] == "-" ? "down" : "up"]
+    }
+  })
+
+  // Unchange hover row's font color
+  symbolsTable.on("rowMouseOver", function (e, row) {
+    document
+      .querySelectorAll(".tabulator .tabulator-row.tabulator-selectable:hover .tabulator-cell")
+      .forEach(elem => {
+        elem.style.color = getDisplayColor()[row.getData().priceChange[0] == "-" ? "down" : "up"]
+      })
   })
 
   // Change Tray Symbol Event
