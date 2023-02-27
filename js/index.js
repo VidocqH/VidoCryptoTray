@@ -64,6 +64,7 @@ function createTable() {
       return response
     },
     dataLoader: false,
+    layout:"fitDataStretch",
     selectable: true,
     rowHeight: 30,
     columns:[
