@@ -38,6 +38,10 @@
   float: right;
 }
 
+.tabulator-row.tabulator-selected {
+  background-color: #cae1ff!important;
+}
+
 .footer-link {
   font-size: calc(var(--font-size) - 4px);
   text-align: center;

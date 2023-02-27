@@ -5,7 +5,7 @@ const WebSocket = require('ws')
 
 const DEFAULT_CONFIG = {
   "likedSymbols": ["BTCUSDT", "ETHUSDT"],
-  "trayTickerSymbol": "btcusdt",
+  "trayTickerSymbols": ["BTCUSDT", "ETHUSDT"],
   "reverseRedGreen": false,
   "tableUpdateInterval": 5000,
   "trayShowField": {
@@ -121,9 +121,12 @@ function generateTrayTitle(ticker) {
   return `${changeColor}${symbol}${price}${change}${percentage}`
 }
 
-function subscribeWebSocketAndUpdateTray(symbol) {
+function subscribeSingleSymbol(symbol) {
+  // Nothing selected, default to BTCUSDT
+  symbol = symbol ? symbol : "BTCUSDT"
+
   // Get Coin Icon
-  fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${symbol.toUpperCase()}`)
+  fetch(`https://api2.binance.com/api/v3/exchangeInfo?symbol=${symbol}`)
     .then(response => response.json())
     .then(result => {
       const baseAsset = result.symbols[0].baseAsset
@@ -135,10 +138,41 @@ function subscribeWebSocketAndUpdateTray(symbol) {
     .catch(error => console.error(error))
 
   // Subscribe
-  socket = new WebSocket(`wss://data-stream.binance.com/ws/${symbol || "btcusdt"}@ticker`)
+  socket = new WebSocket(`wss://data-stream.binance.com/ws/${symbol.toLowerCase()}@ticker`)
   socket.onmessage = (event) => {
     const ticker = JSON.parse(event.data)
     tray.setTitle(generateTrayTitle(ticker))
+  }
+}
+
+function generateTrayTitleForTickers(tickers) {
+  let title = ''
+  for (const ticker of tickers) {
+    title += generateTrayTitle(ticker) + ' \u001b[37m|'
+  }
+  return title.slice(0, -1)
+}
+
+function subscribeAllSymbols(trayTickerSymbols) {
+  tray.setImage(DEFAULT_COIN_ICON)
+  const symbolsMap = new Map(trayTickerSymbols.map(symbol => [symbol, {}]))
+  socket = new WebSocket('wss://data-stream.binance.com/ws/!ticker@arr')
+  socket.onmessage = (event) => {
+    const tickers = JSON.parse(event.data)
+    for (const ticker of tickers) {
+      if (symbolsMap.has(ticker.s)) {
+        symbolsMap.set(ticker.s, ticker)
+      }
+    }
+    tray.setTitle(generateTrayTitleForTickers(symbolsMap.values()))
+  }
+}
+
+function subscribeAndUpdateTray() {
+  if (config.trayTickerSymbols.length <= 1) {
+    subscribeSingleSymbol(config.trayTickerSymbols[0])
+  } else {
+    subscribeAllSymbols(Array.from(config.trayTickerSymbols))
   }
 }
 
@@ -158,12 +192,13 @@ const createWindow = () => {
   })
 
   // Initialize Tray after window created
-  subscribeWebSocketAndUpdateTray(config.trayTickerSymbol)
+  subscribeAndUpdateTray()
 
   // Renderer funcs exposure
-  ipcMain.on('update-ticker', (event, ticker) => {
+  ipcMain.on('update-ticker', (event, tickers) => {
     socket.close()
-    subscribeWebSocketAndUpdateTray(ticker)
+    config.trayTickerSymbols = tickers
+    subscribeAndUpdateTray()
   })
   ipcMain.handle('get-config', () => config )
   ipcMain.on('set-config', (event, config) => setUserConfig(config))
@@ -180,7 +215,7 @@ const createWindow = () => {
 
   setInterval(() => {
     if (socket.readyState === WebSocket.CLOSED) {
-      subscribeWebSocketAndUpdateTray(config.trayTickerSymbol)
+      subscribeAndUpdateTray()
     }
   }, 5000)
 }

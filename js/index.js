@@ -64,6 +64,7 @@ function createTable() {
       return response
     },
     dataLoader: false,
+    selectable: true,
     rowHeight: 30,
     columns:[
       { title: "Symbol", field: "symbol", sorter: "string" },
@@ -73,6 +74,9 @@ function createTable() {
     ],
     rowFormatter: (row) => {
       row.getElement().style.color = getDisplayColor()[row.getData().priceChangePercent[0] == "-" ? "down" : "up"]
+      if (userConfig.trayTickerSymbols.find(elem => elem.toUpperCase() == row.getData().symbol)) {
+        symbolsTable.selectRow(row)
+      }
     }
   })
 
@@ -87,10 +91,10 @@ function createTable() {
 
   // Change Tray Symbol Event
   symbolsTable.on("rowClick", function (e, row) {
-    userConfig.trayTickerSymbol = row.getCell('symbol').getValue().toLowerCase()
-    window.electronAPI.updateTrayTitle(userConfig.trayTickerSymbol)
+    userConfig.trayTickerSymbols = Array.from(symbolsTable.getSelectedData()).map(elem => elem = elem.symbol)
+    window.electronAPI.updateTrayTitle(userConfig.trayTickerSymbols)
     window.electronAPI.setUserConfig(userConfig)
-  })
+  }) 
 
   // Table Right Click Event
   symbolsTable.on("rowContext", function (e, row) {

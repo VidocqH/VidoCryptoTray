@@ -1,7 +1,7 @@
 const {ipcRenderer, contextBridge} = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  updateTrayTitle: (ticker) => ipcRenderer.send('update-ticker', ticker),
+  updateTrayTitle: (tickers) => ipcRenderer.send('update-ticker', tickers),
   getUserConfig: () => ipcRenderer.invoke('get-config'),
   setUserConfig: (editedConfig) => ipcRenderer.send('set-config', editedConfig),
   onWindowToggle: (isWindowOpen) => ipcRenderer.on('is-window-open', isWindowOpen),
