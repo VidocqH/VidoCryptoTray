@@ -6,7 +6,8 @@ Tray updates per second. Ticker table updates per 5 seconds by default(Can chang
 
 Data collects from [Binance](https://www.binance.com/)
 
-<img width="419" alt="image" src="https://user-images.githubusercontent.com/16725418/221058366-c9344e12-87c5-4c96-8595-173ea9a12f64.png">
+<img width="412" alt="image" src="https://user-images.githubusercontent.com/16725418/221626979-3819faa1-861d-43d2-b2be-c1f2ae7b08cc.png">
+<img width="412" alt="image" src="https://user-images.githubusercontent.com/16725418/221627261-312f3290-9da5-4ac5-a2f4-3bbeaa313f30.png">
 
 ## Usage
 + Click the symbol to display it in Tray
