@@ -57,9 +57,9 @@ function createTable() {
     ajaxParams: { "symbols": JSON.stringify(userConfig.likedSymbols) },
     ajaxResponse: function(url, params, response) {
       response.forEach(elem => {
-        elem.lastPrice = Number(elem.lastPrice).toFixed(4)
-        elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(elem.priceChange).toFixed(4)
-        elem.priceChangePercent = (elem.priceChange[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 5) + '%'
+        elem.lastPrice = Number(Number(elem.lastPrice).toFixed(4))
+        elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(Number(elem.priceChange).toFixed(4))
+        elem.priceChangePercent = (elem.priceChange[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 4) + '%'
       })
       return response
     },

@@ -14,6 +14,14 @@ const DEFAULT_CONFIG = {
     "change": false,
     "percentage": true,
   },
+  "trayPrecision": {
+    "price": 2,
+    "change": 2,
+  },
+  "tablePrecision": {
+    "price": 4,
+    "change": 4,
+  },
 }
 
 // Electron Hot Reload when in development
@@ -107,8 +115,8 @@ function generateTrayTitle(ticker) {
   const sign = ticker.c < ticker.o ? '' : '+'
   const changeColor = sign == '' ? color_set.down : color_set.up
   const symbol = config.trayShowField.symbol ? ` ${ticker.s}` : ''
-  const price = config.trayShowField.price ? ` ${Number(ticker.c).toFixed(2)}` : ''
-  const change = config.trayShowField.change ? ` ${sign}${Number(ticker.p).toFixed(2)}` : ''
+  const price = config.trayShowField.price ? ` ${Number(Number(ticker.c).toFixed(config.trayPrecision.price))}` : ''
+  const change = config.trayShowField.change ? ` ${sign}${Number(Number(ticker.p).toFixed(config.trayPrecision.change))}` : ''
   const percentage = config.trayShowField.percentage ? ` ${sign}${Number(ticker.P).toFixed(2)}%` : ''
   return `${changeColor}${symbol}${price}${change}${percentage}`
 }

@@ -67,17 +67,40 @@
         </div>
       </div>
 
+      <div class="inline field">
+        <label>Price Decision: </label>
+        <div class="ui mini input" style="margin-right:2%">
+          <input type="text" placeholder="2" size="10" id="trayPricePrecision" />
+        </div>
+        <label>Change Decision: </label>
+        <div class="ui mini input">
+          <input type="text" placeholder="2" size="10" id="trayChangePrecision" />
+        </div>
+      </div>
+
       <div class="ui horizontal divider">Ticker Table</div>
 
       <div class="inline field">
-        <label>Symbol table update interval: 
-          <i class="grey exclamation circle icon" style="margin: 0;" title="Please pay attention to ratelimit!"></i>
+        <label>Ticker table update interval
+          <i class="grey exclamation circle icon" style="margin: 0;" title="Please pay attention to ratelimit!"></i>:
         </label>
         <div class="ui mini right labeled input" style="width: 32%">
           <input type="text" placeholder="5" id="tableUpdateInterval">
           <div class="ui mini basic label">Seconds</div>
         </div>
       </div>
+      <div class="inline field">
+        <label>Price Decision: </label>
+        <div class="ui mini input" style="margin-right:2%">
+          <input type="text" placeholder="4" size="10" id="tablePricePrecision" />
+        </div>
+        <label>Change Decision: </label>
+        <div class="ui mini input">
+          <input type="text" placeholder="4" size="10" id="tableChangePrecision" />
+        </div>
+      </div>
     </form>
+    <footer style="height: 20px;">
+    </footer>
   </body>
 </html>

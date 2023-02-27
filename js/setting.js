@@ -33,10 +33,32 @@ function setTrayDisplayField() {
   })
 }
 
+function getTrayPrecision() {
+  document.getElementById('trayPricePrecision').value = config.trayPrecision.price
+  document.getElementById('trayChangePrecision').value = config.trayPrecision.change
+}
+
+function setTrayPrecision() {
+  config.trayPrecision.price = document.getElementById('trayPricePrecision').value || 2
+  config.trayPrecision.change = document.getElementById('trayChangePrecision').value || 2
+}
+
+function getTablePrecision() {
+  document.getElementById('tablePricePrecision').value = config.tablePrecision.price
+  document.getElementById('tableChangePrecision').value = config.tablePrecision.change
+}
+
+function setTablePrecision() {
+  config.tablePrecision.price = document.getElementById('tablePricePrecision').value || 4
+  config.tablePrecision.change = document.getElementById('tableChangePrecision').value || 4
+}
+
 function submitConfig() {
   setColorSetting()
   setTableUpdateInterval()
   setTrayDisplayField()
+  setTrayPrecision()
+  setTablePrecision()
   window.electronAPI.setUserConfig(config)
 }
 
@@ -47,5 +69,7 @@ window.electronAPI.getUserConfig().then(originConfig => {
   getColorSetting()
   getTableUpdateInterval()
   getTrayDisplayField()
+  getTrayPrecision()
+  getTablePrecision()
 })
 
