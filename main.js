@@ -19,8 +19,8 @@ const DEFAULT_CONFIG = {
     "change": 2,
   },
   "tablePrecision": {
-    "price": 4,
-    "change": 4,
+    "price": 10,
+    "change": 10,
   },
 }
 
