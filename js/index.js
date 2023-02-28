@@ -57,14 +57,15 @@ function createTable() {
     ajaxParams: { "symbols": JSON.stringify(userConfig.likedSymbols) },
     ajaxResponse: function(url, params, response) {
       response.forEach(elem => {
-        elem.lastPrice = Number(Number(elem.lastPrice).toFixed(4))
-        elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(Number(elem.priceChange).toFixed(4))
+        elem.lastPrice = Number(Number(elem.lastPrice).toFixed(userConfig.tablePrecision.price))
+        elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(Number(elem.priceChange).toFixed(userConfig.tablePrecision.change))
         elem.priceChangePercent = (elem.priceChangePercent[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 4) + '%'
       })
       return response
     },
     dataLoader: false,
     layout:"fitDataStretch",
+    layoutColumnsOnNewData:true,
     selectable: true,
     rowHeight: 30,
     columns:[
