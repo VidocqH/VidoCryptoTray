@@ -36,11 +36,8 @@ let config = undefined
 let socket = undefined
 let color_set = undefined
 
-const ICON_ROOT_PATH = path.join(__dirname, "node_modules/cryptocurrency-icons/32/white")
-const DEFAULT_COIN_ICON = 
-  nativeImage
-    .createFromPath(path.join(ICON_ROOT_PATH, "generic.png"))
-    .resize({ "width": 18, "height": 18 })
+const ICON_ROOT_PATH = path.join(__dirname, "assets/coinIcons")
+const DEFAULT_COIN_ICON = nativeImage.createFromPath(path.join(ICON_ROOT_PATH, "genericTemplate.png"))
 const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json')
 const ASSET_PATH = path.join(__dirname, 'assets')
 
@@ -130,9 +127,7 @@ function subscribeSingleSymbol(symbol) {
     .then(response => response.json())
     .then(result => {
       const baseAsset = result.symbols[0].baseAsset
-      const icon = nativeImage
-        .createFromPath(path.join(ICON_ROOT_PATH, baseAsset.toLowerCase() + '.png'))
-        .resize({"width": 18, "height": 18})
+      const icon = nativeImage.createFromPath(path.join(ICON_ROOT_PATH, baseAsset.toLowerCase() + 'Template.png'))
       tray.setImage(icon.isEmpty() ? DEFAULT_COIN_ICON : icon)
     })
     .catch(error => console.error(error))
@@ -148,7 +143,7 @@ function subscribeSingleSymbol(symbol) {
 function generateTrayTitleForTickers(tickers) {
   let title = ''
   for (const ticker of tickers) {
-    title += generateTrayTitle(ticker) + ' \u001b[37m|'
+    title += generateTrayTitle(ticker) + ' \33[0m|'
   }
   return title.slice(0, -1)
 }
