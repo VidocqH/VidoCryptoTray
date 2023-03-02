@@ -59,7 +59,7 @@ function createTable() {
       response.forEach(elem => {
         elem.lastPrice = Number(Number(elem.lastPrice).toFixed(userConfig.tablePrecision.price))
         elem.priceChange = (elem.priceChange[0] == "-" ? "" : "+") + Number(Number(elem.priceChange).toFixed(userConfig.tablePrecision.change))
-        elem.priceChangePercent = (elem.priceChangePercent[0] == "-" ? "" : "+") + elem.priceChangePercent.slice(0, 4) + '%'
+        elem.priceChangePercent = (elem.priceChangePercent[0] == "-" ? "" : "+") + Number(elem.priceChangePercent).toFixed(2) + '%'
       })
       return response
     },
