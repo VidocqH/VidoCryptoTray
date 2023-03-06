@@ -161,9 +161,16 @@ function subscribeAllSymbols(trayTickerSymbols) {
     }
     tray.setTitle(generateTrayTitleForTickers(symbolsMap.values()))
   }
+  socket.onerror = (err) => {
+    console.error(err)
+    socket.close()
+  }
 }
 
-function subscribeAndUpdateTray() {
+async function subscribeAndUpdateTray() {
+  if (socket) {
+    await socket.close()
+  }
   if (config.trayTickerSymbols.length <= 1) {
     subscribeSingleSymbol(config.trayTickerSymbols[0])
   } else {
@@ -191,7 +198,6 @@ const createWindow = () => {
 
   // Renderer funcs exposure
   ipcMain.on('update-ticker', (event, tickers) => {
-    socket.close()
     config.trayTickerSymbols = tickers
     subscribeAndUpdateTray()
   })
@@ -209,10 +215,10 @@ const createWindow = () => {
   })
 
   setInterval(() => {
-    if (socket.readyState === WebSocket.CLOSED) {
+    if (socket === undefined || (socket && socket.readyState === WebSocket.CLOSED)) {
       subscribeAndUpdateTray()
     }
-  }, 5000)
+  }, 10000)
 }
 
 const toggleWindow = () => {
